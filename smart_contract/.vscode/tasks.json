@@ -14,6 +14,41 @@
             "command": "cargo clean && rm -rf target/idl target/types && rm -rf node_modules && rm -rf .anchor && rm -rf dist && rm -rf .nyc_output && rm -rf coverage && rm -rf .tsbuildinfo && rm -rf yarn.lock && rm -rf package-lock.json",
             "problemMatcher": [],
             "group": "build"
+        },
+        {
+            "label": "NPM Install",
+            "type": "shell",
+            "command": "npm install",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Anchor Build",
+            "type": "shell",
+            "command": "anchor build",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Build TypeScript (dist)",
+            "type": "shell",
+            "command": "tsc --outDir dist",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Test JS in dist",
+            "type": "shell",
+            "command": "npx mocha -t 1000000 \"dist/tests/**/*.js\"",
+            "problemMatcher": [],
+            "group": "test"
+        },
+        {
+            "label": "Test JS in dist (with Anchor env)",
+            "type": "shell",
+            "command": "ANCHOR_PROVIDER_URL=http://localhost:8899 ANCHOR_WALLET=$HOME/.config/solana/id.json npx mocha -t 1000000 \"dist/tests/**/*.js\"",
+            "problemMatcher": [],
+            "group": "test"
         }
     ]
 }

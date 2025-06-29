@@ -82,7 +82,7 @@ pub struct CurrencyRate {
 }
 
 // MOVE BatchEntryData BEFORE declare_id! and #[program] module
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug, PartialEq)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug, PartialEq, Default)]
 pub struct BatchEntryData {
     pub entry_id: String,
     pub debit: String,
