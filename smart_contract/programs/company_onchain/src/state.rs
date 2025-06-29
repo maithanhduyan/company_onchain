@@ -5,16 +5,28 @@ use anchor_lang::prelude::*;
 #[account]
 #[derive(Default, Debug)]
 pub struct Entry {
-    pub entry_id: String,
-    pub debit: String,
-    pub credit: String,
-    pub amount: u64,
-    pub currency: String,
-    pub timestamp: i64,
+    pub entry_id: String,      // Max 32 chars
+    pub debit: String,         // Max 16 chars (account code)
+    pub credit: String,        // Max 16 chars (account code)
+    pub amount: u64,           // Amount in smallest unit
+    pub currency: String,      // Max 8 chars (USD, VND, etc.)
+    pub timestamp: i64,        // Unix timestamp
+    pub creator: Pubkey,       // Who created this entry
 }
 
 impl Entry {
-    // 4 bytes cho length prefix + 64 bytes cho nội dung mỗi String (entry_id, debit, credit, currency)
-    // 8 bytes cho amount (u64), 8 bytes cho timestamp (i64)
-    pub const MAX_SIZE: usize = 4 + 64 + 4 + 64 + 4 + 64 + 8 + 4 + 64 + 8;
+    // 4 + 32 (entry_id) + 4 + 16 (debit) + 4 + 16 (credit) + 8 (amount) + 4 + 8 (currency) + 8 (timestamp) + 32 (creator)
+    pub const MAX_SIZE: usize = 4 + 32 + 4 + 16 + 4 + 16 + 8 + 4 + 8 + 8 + 32;
+}
+
+#[account]
+#[derive(Default, Debug)]
+pub struct CompanyLedger {
+    pub authority: Pubkey,
+    pub entry_count: u64,
+    pub total_entries: u64,
+}
+
+impl CompanyLedger {
+    pub const MAX_SIZE: usize = 32 + 8 + 8;
 }

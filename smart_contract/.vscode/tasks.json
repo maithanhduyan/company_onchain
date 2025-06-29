@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Stop Solana Validator",
+      "type": "shell",
+      "command": "pkill -f solana-test-validator",
+      "problemMatcher": [],
+      "group": "test"
+    }
+  ]
+}

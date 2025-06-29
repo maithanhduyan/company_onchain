@@ -12,7 +12,13 @@ RUN apt-get update && \
     nodejs npm yarn \
     sudo lsb-release && \
     apt-get install -y lsof && \
+    apt-get install -y htop && \
+    apt-get install -y --no-install-recommends \
+    openssh-client jq libclang-dev && \
     rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip, setuptools, and wheel
+RUN python3 -m pip install --upgrade pip setuptools wheel
 
 # Install Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
