@@ -22,6 +22,23 @@ import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
 import { assert } from "chai";
 import { CompanyOnchain } from "../target/types/company_onchain";
+import { Idl } from "@project-serum/anchor";
+
+// Interface tạm cho entry/ledger để test không lỗi type
+interface Entry {
+  entryId: string;
+  debit: string;
+  credit: string;
+  amount: anchor.BN;
+  currency: string;
+  creator: anchor.web3.PublicKey;
+  timestamp: number;
+}
+interface CompanyLedger {
+  authority: anchor.web3.PublicKey;
+  entryCount: anchor.BN;
+  totalEntries: anchor.BN;
+}
 
 describe("company_onchain", () => {
   const provider = anchor.AnchorProvider.env();
@@ -30,7 +47,7 @@ describe("company_onchain", () => {
   // Use correct program ID
   const programId = new anchor.web3.PublicKey("5A3ZEMpudXKh5KMTuZoNesPGWpUoYuHnFKAhzYQoEeqH");
   const idl = require("../target/idl/company_onchain.json");
-  const program = new anchor.Program(idl, programId, provider) as Program<CompanyOnchain>;
+  const program = new anchor.Program(idl as Idl, programId, provider);
   
   let ledgerKeypair: anchor.web3.Keypair;
   let ledgerPda: anchor.web3.PublicKey;
@@ -54,7 +71,7 @@ describe("company_onchain", () => {
   });
 
   it("Khởi tạo ledger thành công", async () => {
-    const ledger = await program.account.companyLedger.fetch(ledgerPda);
+    const ledger = await program.account.companyLedger.fetch(ledgerPda) as CompanyLedger;
     
     assert.equal(ledger.authority.toString(), provider.wallet.publicKey.toString());
     assert.equal(ledger.entryCount.toString(), "0");
@@ -100,7 +117,7 @@ describe("company_onchain", () => {
       .rpc();
 
     // Fetch and verify entry
-    const entry = await program.account.entry.fetch(entryPda);
+    const entry = await program.account.entry.fetch(entryPda) as Entry;
     console.log("Fetched entry:", entry);
 
     assert.equal(entry.entryId, entryId);
@@ -112,7 +129,7 @@ describe("company_onchain", () => {
     assert.isTrue(entry.timestamp > 0);
 
     // Verify ledger stats updated
-    const updatedLedger = await program.account.companyLedger.fetch(ledgerPda);
+    const updatedLedger = await program.account.companyLedger.fetch(ledgerPda) as CompanyLedger;
     assert.equal(updatedLedger.entryCount.toString(), "1");
     assert.equal(updatedLedger.totalEntries.toString(), "1");
   });
@@ -145,7 +162,7 @@ describe("company_onchain", () => {
         })
         .rpc();
       assert.fail("Should have failed with EntryIdTooLong error");
-    } catch (error) {
+    } catch (error: any) {
       assert.include(error.toString(), "Entry ID too long");
     }
   });
@@ -178,7 +195,7 @@ describe("company_onchain", () => {
         })
         .rpc();
       assert.fail("Should have failed with InvalidAmount error");
-    } catch (error) {
+    } catch (error: any) {
       assert.include(error.toString(), "Amount must be greater than 0");
     }
   });
@@ -211,7 +228,7 @@ describe("company_onchain", () => {
         })
         .rpc();
       assert.fail("Should have failed with SameDebitCredit error");
-    } catch (error) {
+    } catch (error: any) {
       assert.include(error.toString(), "Debit and credit accounts cannot be the same");
     }
   });
@@ -260,7 +277,7 @@ describe("company_onchain", () => {
       .rpc();
 
     // Verify update
-    const updatedEntry = await program.account.entry.fetch(entryPda);
+    const updatedEntry = await program.account.entry.fetch(entryPda) as Entry;
     assert.equal(updatedEntry.debit, "1002");
     assert.equal(updatedEntry.credit, "2002");
     assert.equal(updatedEntry.amount.toString(), "2000");
@@ -313,9 +330,38 @@ describe("company_onchain", () => {
         })
         .rpc();
       assert.fail("Should have failed because account already exists");
-    } catch (error) {
+    } catch (error: any) {
       // This will fail with "already in use" error from Solana
       assert.include(error.toString().toLowerCase(), "already in use");
+    }
+  });
+
+  it("Batch ghi nhiều entry kế toán", async () => {
+    // Đúng theo IDL: arg là entriesData (vector of batchEntryData), field camelCase
+    const batchEntries = [
+      { entryId: "BATCH1", debit: "1111", credit: "2222", amount: new anchor.BN(500), currency: "USD" },
+      { entryId: "BATCH2", debit: "3333", credit: "4444", amount: new anchor.BN(700), currency: "EUR" }
+    ];
+    // Call batch_record_entries
+    await program.methods
+      .batchRecordEntries(batchEntries)
+      .accounts({
+        ledger: ledgerPda,
+        user: provider.wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .rpc();
+    // Fetch lại từng entry để xác nhận
+    for (const entry of batchEntries) {
+      const [entryPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("entry"), ledgerPda.toBuffer(), Buffer.from(entry.entryId)],
+        program.programId
+      );
+      const entryAcc = await program.account.entry.fetch(entryPda) as Entry;
+      assert.equal(entryAcc.debit, entry.debit);
+      assert.equal(entryAcc.credit, entry.credit);
+      assert.equal(entryAcc.currency, entry.currency);
+      assert.equal(entryAcc.amount.toString(), entry.amount.toString());
     }
   });
 });

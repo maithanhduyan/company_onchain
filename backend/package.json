@@ -4,7 +4,8 @@
   "description": "company_onchain_backend",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "call-contract": "cd ../smart_contract && npx ts-node client/client.ts"
   },
   "author": "",
   "license": "MIT",

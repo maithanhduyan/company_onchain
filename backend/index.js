@@ -4,6 +4,7 @@ const express = require("express");
 const fs = require("fs");
 const sqlite3 = require("sqlite3").verbose();
 const csvParser = require("csv-parser");
+const { exec } = require("child_process");
 
 const app = express();
 const PORT = 3000;
@@ -151,6 +152,16 @@ app.delete("/entries/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// API gọi smart contract (client.ts)
+app.get("/solana", async (req, res) => {
+  exec("npm run call-contract", { cwd: __dirname }, (error, stdout, stderr) => {
+    if (error) {
+      return res.status(500).json({ error: error.message, stderr });
+    }
+    res.json({ stdout, stderr });
+  });
 });
 
 app.listen(PORT, () => {

@@ -22,4 +22,19 @@ pub enum CustomError {
     TooManyEntries,
     #[msg("Batch cannot be empty")]
     EmptyBatch,
+    // --- EXTENDED ERRORS ---
+    #[msg("Ledger is frozen")]
+    LedgerFrozen,
+    #[msg("Insufficient permissions")]
+    InsufficientPermissions,
+    #[msg("Invalid account code format")]
+    InvalidAccountCode,
+    #[msg("Currency not supported")]
+    UnsupportedCurrency,
+    #[msg("Entry locked for audit")]
+    EntryLocked,
+    #[msg("Page size too large")]
+    PageSizeTooLarge,
+    #[msg("Account code empty")]
+    AccountCodeEmpty,
 }

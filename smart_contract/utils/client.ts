@@ -1,3 +1,27 @@
+/**
+ * CompanyOnchainClient SDK - Anchor Solana TypeScript Client
+ * ---------------------------------------------------------
+ *
+ * Mục đích:
+ * - Cung cấp class và hàm tiện ích thao tác với smart contract Solana (Anchor) từ TypeScript/Node.js.
+ * - Đóng gói các thao tác phổ biến: khởi tạo ledger, ghi entry, cập nhật, xóa, lấy dữ liệu, lắng nghe sự kiện, batch ghi entries...
+ * - Đơn giản hóa việc gọi các hàm của smart contract, chuẩn hóa logic xử lý PDA, accounts, params.
+ * - Hỗ trợ test, script, backend, frontend dễ dàng, tránh lặp lại code truy cập contract.
+ *
+ * Vai trò:
+ * - Là client SDK thu nhỏ cho smart contract, giúp thao tác Anchor Solana dễ dàng, chuẩn hóa và tái sử dụng.
+ * - Có thể dùng cho test tự động, backend service, hoặc frontend dApp.
+ *
+ * Sử dụng:
+ *   import { createCompanyOnchainClient } from "./utils/client";
+ *   const client = createCompanyOnchainClient(program, provider);
+ *   await client.initializeLedger();
+ *   await client.recordEntry(...);
+ *   ...
+ *
+ * Xem hàm exampleUsage() ở cuối file để tham khảo cách sử dụng thực tế.
+ */
+
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
 import { PublicKey, Keypair, SystemProgram } from "@solana/web3.js";

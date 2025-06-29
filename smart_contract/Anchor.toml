@@ -22,7 +22,7 @@ cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "mocha -t 1000000 tests/"
+test = "npx mocha -t 1000000 tests/"
 build = "anchor build"
 deploy-local = "anchor deploy --provider.cluster localnet"
 deploy-devnet = "anchor deploy --provider.cluster devnet"

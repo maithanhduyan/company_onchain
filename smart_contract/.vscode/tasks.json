@@ -1,12 +1,19 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Stop Solana Validator",
-      "type": "shell",
-      "command": "pkill -f solana-test-validator",
-      "problemMatcher": [],
-      "group": "test"
-    }
-  ]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Stop Solana Validator",
+            "type": "shell",
+            "command": "pkill -f solana-test-validator",
+            "problemMatcher": [],
+            "group": "test"
+        },
+        {
+            "label": "Clean project (Rust, Anchor, Node)",
+            "type": "shell",
+            "command": "cargo clean && rm -rf target/idl target/types && rm -rf node_modules && rm -rf .anchor && rm -rf dist && rm -rf .nyc_output && rm -rf coverage && rm -rf .tsbuildinfo && rm -rf yarn.lock && rm -rf package-lock.json",
+            "problemMatcher": [],
+            "group": "build"
+        }
+    ]
 }

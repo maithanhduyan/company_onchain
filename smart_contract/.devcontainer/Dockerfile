@@ -17,9 +17,6 @@ RUN apt-get update && \
     openssh-client jq libclang-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip, setuptools, and wheel
-RUN python3 -m pip install --upgrade pip setuptools wheel
-
 # Install Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
