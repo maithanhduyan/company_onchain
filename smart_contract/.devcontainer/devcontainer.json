@@ -1,0 +1,22 @@
+{
+    "name": "Solana Anchor DevContainer",
+    "dockerComposeFile": [
+        "docker-compose.yml"
+    ],
+    "service": "dev",
+    "workspaceFolder": "/workspace/smart_contract",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash"
+            },
+            "extensions": [
+                "ms-vscode.cpptools",
+                "rust-lang.rust-analyzer",
+                "esbenp.prettier-vscode",
+                "ms-azuretools.vscode-docker"
+            ]
+        }
+    },
+    "postCreateCommand": "anchor --version && solana --version && rustc --version && node --version && yarn --version"
+}

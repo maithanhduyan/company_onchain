@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@project-serum/anchor": "^0.26.0",
+    "@types/chai": "^5.2.2",
+    "@types/jest": "^30.0.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.0.7",
+    "chai": "^4.5.0",
+    "mocha": "^11.7.1",
+    "ts-node": "^10.9.2"
+  }
+}

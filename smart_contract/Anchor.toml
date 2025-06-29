@@ -1,0 +1,9 @@
+[programs.localnet]
+company_onchain = "5A3ZEMpudXKh5KMTuZoNesPGWpUoYuHnFKAhzYQoEeqH"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "mocha -t 1000000 tests/"

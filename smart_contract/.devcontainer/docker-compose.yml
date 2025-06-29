@@ -1,0 +1,16 @@
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    working_dir: /workspace
+    command: sleep infinity
+    tty: true
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+    ports:
+      - "8899:8899" # Solana test validator
+      - "3000:3000" # For Node.js/Anchor tests if needed
