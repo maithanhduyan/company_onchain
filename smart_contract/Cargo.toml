@@ -1,7 +1,0 @@
-[workspace]
-members = [
-    "programs/company_onchain"
-]
-
-[profile.release]
-overflow-checks = true

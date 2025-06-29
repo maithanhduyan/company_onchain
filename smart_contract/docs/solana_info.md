@@ -54,3 +54,13 @@ pubkey: HMaHbBo5We8Letv9M3ncNo7BJzXZMyHFt5J77NmZiz3o
 Save this seed phrase to recover your new keypair:
 abstract online client crater moral pet come assist copper spoil march remain
 =========================================================================
+
+root@f5675b6d16e8:/workspace/company-onchain# mkdir -p /root/.config/solana && solana-keygen new --no-bip39-passphrase --force --outfile /root/.config/solana/id.json
+Generating a new keypair
+Wrote new keypair to /root/.config/solana/id.json
+=============================================================================
+pubkey: HcYnjUktf5cpM1JnaGEakWveKvDBSoM1SkouXnE1K7TH
+=============================================================================
+Save this seed phrase to recover your new keypair:
+purse angle scene solve choose carry grass execute brave ozone pottery cradle
+=============================================================================

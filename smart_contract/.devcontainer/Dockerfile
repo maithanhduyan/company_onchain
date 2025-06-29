@@ -9,7 +9,6 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl build-essential pkg-config libssl-dev \
     libudev-dev ca-certificates git python3 python3-pip \
-    nodejs npm yarn \
     sudo lsb-release && \
     apt-get install -y lsof && \
     apt-get install -y htop && \
@@ -17,18 +16,8 @@ RUN apt-get update && \
     openssh-client jq libclang-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-ENV PATH="/root/.cargo/bin:${PATH}"
-
-# Install Solana CLI
-RUN sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
-ENV PATH="/root/.local/share/solana/install/active_release/bin:${PATH}"
-
-# Install Anchor CLI (via AVM)
-RUN cargo install --git https://github.com/coral-xyz/anchor avm --force && \
-    avm install latest && \
-    avm use latest
+# Install Rust, Solana, Anchor, Node, Yarn
+RUN curl --proto '=https' --tlsv1.2 -sSfL https://solana-install.solana.workers.dev | bash
 
 # Set workdir
 WORKDIR /workspace
