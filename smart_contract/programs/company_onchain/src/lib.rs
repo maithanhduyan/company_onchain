@@ -128,6 +128,7 @@ pub mod company_onchain {
     }
 
     // Batch record multiple entries
+    /*
     pub fn batch_record_entries(
         ctx: Context<BatchRecordEntries>,
         entries_data: Vec<EntryData>,
@@ -160,6 +161,7 @@ pub mod company_onchain {
 
         Ok(())
     }
+    */
 }
 
 #[derive(Accounts)]
@@ -225,24 +227,25 @@ pub struct DeleteEntry<'info> {
     pub user: Signer<'info>,
 }
 
-#[derive(Accounts)]
-pub struct BatchRecordEntries<'info> {
-    #[account(mut)]
-    pub ledger: Account<'info, CompanyLedger>,
-    #[account(mut)]
-    pub user: Signer<'info>,
-    pub system_program: Program<'info, System>,
-}
+// #[derive(Accounts)]
+// pub struct BatchRecordEntries<'info> {
+//     #[account(mut)]
+//     pub ledger: Account<'info, CompanyLedger>,
+//     #[account(mut)]
+//     pub user: Signer<'info>,
+//     pub system_program: Program<'info, System>,
+// }
 
 // Data structures
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
-pub struct EntryData {
-    pub entry_id: String,
-    pub debit: String,
-    pub credit: String,
-    pub amount: u64,
-    pub currency: String,
-}
+// Đổi EntryData thành inline type cho batch_record_entries, tránh lỗi IDL
+// #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+// pub struct EntryData {
+//     pub entry_id: String,
+//     pub debit: String,
+//     pub credit: String,
+//     pub amount: u64,
+//     pub currency: String,
+// }
 
 // Events
 #[event]
